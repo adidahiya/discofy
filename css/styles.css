@@ -1,0 +1,45 @@
+.overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  -khtml-text-overflow: ellipsis;
+}
+.opacity-transition {
+  -webkit-transition-property: -khtml-opacity, opacity;
+  -webkit-transition-duration: 0.15s, 0.15s;
+  -webkit-transition-timing-function: linear, linear;
+  -moz-transition-property: -moz-opacity, opacity;
+  -moz-transition-duration: 0.15s, 0.15s;
+  -moz-transition-timing-function: linear, linear;
+  transition-property: -moz-opacity, -khtml-opacity, opacity, filter;
+  transition-duration: 0.15s, 0.15s, 0.15s, 0.15s;
+  transition-timing-function: linear, linear, linear, linear;
+}
+a {
+  -webkit-transition: color 0.1s linear;
+  -moz-transition: color 0.1s linear;
+  -ms-transition: color 0.1s linear;
+  -o-transition: color 0.1s linear;
+  transition: color 0.1s linear;
+}
+.container {
+  margin: 0 auto;
+  padding: 10px 30px;
+}
+#title {
+  width: 100%;
+  font-size: 40px;
+  line-height: 60px;
+  text-align: center;
+  margin: 10px 0 20px 0;
+}
+.left {
+  width: 45%;
+  float: left;
+}
+.right {
+  width: 45%;
+  float: right;
+}

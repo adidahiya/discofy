@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Discofy</title>
+  <title>Discofy</title>
     
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="sp://discofy/css/styles.css">
-    <link rel="stylesheet" href="sp://import/css/eve.css">
-    <link rel="stylesheet" href="sp://import/css/shared.css">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="sp://discofy/css/styles.css">
+  <link rel="stylesheet" href="sp://import/css/eve.css">
+  <link rel="stylesheet" href="sp://import/css/shared.css">
     
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 
 <body onload="sp = getSpotifyApi(1); discofy = sp.require('scripts/discofy'); discofy.init();">
-    <h1>Discofy!</h1>
+  <div class="container">
+    <h1 id="title">Discofy</h1>
     
+    <div class="left">
+      <h3>Current Games</h3>
+      <button class="new-button">+ New Game</button>
+    </div>
+    
+    <div class="right">
+      <h3>Listening History</h3>
+      <ul id="listens"></ul>
+    </div>
+    
+  </div>
 </body>
 
 </html>

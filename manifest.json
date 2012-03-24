@@ -1,11 +1,28 @@
 {
-    "BundleType": "Application",
+    "AppDescription": {
+        "en": "A tutorial app for Spotify Apps API"
+    },
     "AppIcon": {
         "36x18": "images/discofy.png"
     },
     "AppName": {
         "en": "Discofy"
     },
+    "BundleType": "Application",
+    "DefaultTabs": [
+        {
+            "arguments": "home_tab",
+            "title": {
+                "en": "Home"
+            }
+        },
+        {
+            "arguments": "games",
+            "title": {
+                "en": "Games"
+            }
+        }
+    ],
     "SupportedLanguages": [
         "en"
     ]
