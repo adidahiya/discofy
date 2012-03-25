@@ -58,6 +58,11 @@ function init() {
                             playlist = models.Playlist.fromURI(uri),
                             count = playlist.length;
 
+                      playlist.observe (models.EVENT.LOAD, function () {
+                      console.log ("playlist loaded");
+                        console.log (this);
+                      });
+
                         $current_games.append("<li id='" + uri + "'><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
                     }
                 });
@@ -92,6 +97,7 @@ function init() {
 function updatePlaylistView(uri) {
     current_playlist_uri = uri;
     
+
     // Toggle loading indicator
     var $spinner = $(".right").find(".loading");
     
@@ -167,6 +173,30 @@ function renderSearchResults() {
     $("ul#search-results").html(search_results.node);
 }
 
+function check (track1, track2){
+  var t1full = track1.name.split(" ");
+  for (var i = 0; i < track1.artists.length; i++){
+    t1full = t1full.concat (track1.artists [i].name.split (" "));
+  }
+  var t2full = track2.name.split(" ");
+  for (var i = 0; i < track2.artists.length; i++){
+    t2full = t2full.concat (track2.artists [i].name.split (" "));
+  }
+
+  console.log (t1full);
+
+  t2full = t2full.join (" ");
+  console.log (t2full);
+
+  for (var i = 0; i < t1full.length; i++){
+    if (t1full [i].length > 2 &&  t2full.search (t1full [i]) != -1){
+      return true;
+    }
+  }
+
+  return false;
+}
+
 $(document).ready(function() {
     var $new_game_form = $("#new-game-form"),
         tracks = models.library.tracks;
@@ -230,7 +260,6 @@ $(document).ready(function() {
         event.preventDefault();
         var track_uri = this.id,
             playlist = models.Playlist.fromURI(current_playlist_uri);
-        
         playlist.add(track_uri);
     });
     
