@@ -145,7 +145,7 @@ $(document).ready(function() {
         
         if (name !== "") {
             
-            var discofy_url = "http://discofy.herokuapp.com/game/new",
+            var discofy_url = "http://3i9z.localtunnel.com/game/new",
                 selected = $("ul.chzn-results").find(".result-selected"),
                 players = [];
             
@@ -155,20 +155,27 @@ $(document).ready(function() {
                 players.push(friendsList[parseInt(index)]);
             }
             
+          players.push ("123423465");
+
             var params = { 
-                title   : name,
-                owner   : author,
-                users   : players,
-                id      : author
+              title   : name,
+              owner   : author,
+              users   : players,
+              id      : author
             };
-            console.log(params);
-            
-            $.post(discofy_url, params, function(data) {
-                console.log("POST response:");
-                console.log(data);
-                
-                updatePlaylistView(data.uri);
-            });
+          console.log (params);
+          $.ajaxSettings.traditional = true;
+          $.ajax({type: "POST",
+                  url:  discofy_url,
+                  dataType: "json",
+                  async: true,
+                  data: params,
+                  success: function(data){
+                    console.log("POST response:");
+                    console.log(data);
+                    
+                    updatePlaylistView(data.uri);
+                  }});
         }
     });
     

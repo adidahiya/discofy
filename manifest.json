@@ -11,8 +11,10 @@
     "BundleType": "Application",
     "RequiredInterface": 1,
     "RequiredPermissions": [
-        "https://graph.facebook.com",
-        "http://discofy.herokuapp.com"
+      "https://graph.facebook.com",
+      "http://discofy.herokuapp.com",
+      "http://3i9z.localtunnel.com",
+      "http://localhost:5000"
     ],
     "SupportedLanguages": [
         "en"
