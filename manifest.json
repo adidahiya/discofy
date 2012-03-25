@@ -12,7 +12,7 @@
     "RequiredInterface": 1,
     "RequiredPermissions": [
         "https://graph.facebook.com",
-        "http://fonts.googleapis.com"
+        "http://discofy.herokuapp.com"
     ],
     "SupportedLanguages": [
         "en"

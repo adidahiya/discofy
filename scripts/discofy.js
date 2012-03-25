@@ -52,8 +52,6 @@ function init() {
                         var img = "<img src='" + t.image + "' />";
                         $listens.append("<li><a href='" + tracklink + "'>" + img + "<br/>" + trackname + "</a></li>");
                     });
-                    
-                    // $('#listens').append('<li><a href="' + tracklink + '">' + trackname + '</a></li>');       
                 }
             });
         },
@@ -63,16 +61,20 @@ function init() {
         onComplete : function() { }
     });
     
-    var discofy_url = "";
-    $.get(discofy_url, {
-        user : $("input#author-id").val()
-    }, function(data) {   
+    var owner_id = $("input#author-id").val(),
+        discofy_url = "http://discofy.herokuapp.com/user/games?id=" + owner_id;
+    $.get(discofy_url, function(data) {   
         if (typeof data !== "object") return;
         
-        for (var i = 0; i < data.length; i++) {
-            var name = data[i].name,
-                count = data[i].count;
-            $("ul#current-games").append("<li><a href='#!'>" + name + "</a> - " + count + " songs</li>");
+        var games = data.games;
+        
+        for (var i = 0; i < games.length; i++) {
+            var name = games[i].title,
+                uri = games[i].uri,
+                playlist = models.Playlist.fromURI(uri),
+                count = playlist.length;
+            
+            $("ul#current-games").append("<li><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
         }
     });
 }
@@ -97,10 +99,27 @@ function updatePlaylistView(uri) {
     
     $("#current-game-list").text(playlist.data.name);
     $("#current-game-owner").text("Created by " + username);
-    $("#current-game-count").text(String(count) + "tracks");
+    $("#current-game-count").text(String(count) + " tracks");
     
     // Light styling for playlists
     $(".sp-list").addClass("sp-light");
+}
+
+function executeSearch(query) {
+    var search = new models.Search(query, {
+        searchAlbums : false,
+        searchArtists : false,
+        searchPlaylists : false,
+        searchType : models.SEARCHTYPE.SUGGESTION
+    });
+    
+    search.observe(models.EVENT.CHANGE, function() {
+    	search.tracks.forEach(function(track) {
+    		console.log(track.name);
+    	});
+    });
+
+    search.appendNext();
 }
 
 $(document).ready(function() {
@@ -118,7 +137,7 @@ $(document).ready(function() {
         
         if (name !== "") {
             
-            var discofy_url = "",
+            var discofy_url = "http://discofy.herokuapp.com/game/new",
                 selected = $("ul.chzn-results").find(".result-selected"),
                 players = [];
             
@@ -129,9 +148,10 @@ $(document).ready(function() {
             }
             
             $.post(discofy_url, { 
-                name : name,
-                author : author,
-                players : players
+                title   : name,
+                owner   : author,
+                users   : players,
+                id      : author
             }, function(data) {
                 console.log("POST response:");
                 console.log(data);
