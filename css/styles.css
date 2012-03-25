@@ -1,3 +1,4 @@
+@import "forms.css";
 .overflow-ellipsis {
   overflow: hidden;
   white-space: nowrap;
@@ -38,6 +39,44 @@ a {
 .left {
   width: 45%;
   float: left;
+}
+.left button#new-game {
+  float: right;
+  margin-top: -35px;
+}
+.left #new-game-form {
+  margin-top: 10px;
+  padding: 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.3);
+  background: rgba(50, 50, 50, 0.1);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.8);
+}
+.left #new-game-form input[type='text'] {
+  width: 97%;
+  border: solid 1px #AAA;
+}
+.left #new-game-form input[type='text']:focus {
+  border-color: #0993c7;
+}
+.left #new-game-form select {
+  width: 75%;
+}
+.left #new-game-form button {
+  float: right;
+  margin-top: -33px;
+}
+.left #new-game-form #players_chzn {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.left #new-game-form .chzn-container .chzn-results li {
+  text-shadow: none;
 }
 .right {
   width: 45%;

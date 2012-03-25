@@ -23,6 +23,10 @@
             }
         }
     ],
+    "RequiredInterface": 1,
+    "RequiredPermissions": [
+        "https://graph.facebook.com"
+    ],
     "SupportedLanguages": [
         "en"
     ]

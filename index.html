@@ -4,11 +4,13 @@
   <title>Discofy</title>
     
   <meta charset="utf-8">
-  <link rel="stylesheet" href="sp://discofy/css/styles.css">
   <link rel="stylesheet" href="sp://import/css/eve.css">
   <link rel="stylesheet" href="sp://import/css/shared.css">
+  <link rel="stylesheet" href="sp://discofy/css/styles.css">
+  <link rel="stylesheet" href="sp://discofy/css/chosen.css">
     
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="sp://discofy/scripts/jquery.min.js"></script>
+  <script type="text/javascript" src="sp://discofy/scripts/chosen.jquery.js"></script>
 </head>
 
 <body onload="sp = getSpotifyApi(1); discofy = sp.require('scripts/discofy'); discofy.init();">
@@ -17,7 +19,21 @@
     
     <div class="left">
       <h3>Current Games</h3>
-      <button class="new-button">+ New Game</button>
+      <button class="new-button" id="new-game">+ New Game</button>
+      
+      <div id="new-game-form">
+        <div class="field">
+          <input id="author-id" name="author" type="hidden" />
+          <input id="playlist-uri" name="playlist_uri" type="hidden" />
+          <input id="playlist-name" name="playlist_name" type="text" placeholder="Playlist name" autofocus="autofocus" />
+        </div>
+        <div class="field">
+          <select class="chzn-select" multiple data-placeholder="Choose friends to play with" id="players" name="players">
+            
+          </select>
+        </div>
+        <button class="new-button" id="create-game">Create Game</button>
+      </div>
     </div>
     
     <div class="right">
