@@ -5,7 +5,7 @@ var sp = getSpotifyApi(1),
     auth = sp.require('sp://import/scripts/api/auth'),
     friendsList = [];
 
-/* Authentication params */
+/* Facebook authentication params */
 var permissions = [],
     app_id = '192337954211372',
     request_url = 'https://graph.facebook.com/me';
@@ -40,11 +40,20 @@ function init() {
             
             var listening_url = request_url + '/music.listens?access_token=' + accessToken;
             $.getJSON(listening_url, function(data) {
-                var listens = data.data;
-                for(var i=0;i<listens.length;i++) {
-                    var tracklink = listens[i].data.song.url;
-                    var trackname = listens[i].data.song.title;
-                    $('#listens').append('<li><a href="' + tracklink + '">' + trackname + '</a></li>');
+                var listens = data.data,
+                    $listens = $("#listens"),
+                    num_listens = Math.min(listens.length, 10);
+                    
+                for(var i=0;i<num_listens;i++) {
+                    var tracklink = listens[i].data.song.url,
+                        trackname = listens[i].data.song.title;
+                    
+                    var track = models.Track.fromURI(tracklink, function(t) {
+                        var img = "<img src='" + t.image + "' />";
+                        $listens.append("<li><a href='" + tracklink + "'>" + img + "<br/>" + trackname + "</a></li>");
+                    });
+                    
+                    // $('#listens').append('<li><a href="' + tracklink + '">' + trackname + '</a></li>');       
                 }
             });
         },
@@ -57,13 +66,41 @@ function init() {
     var discofy_url = "";
     $.get(discofy_url, {
         user : $("input#author-id").val()
-    }, function(data) {        
+    }, function(data) {   
+        if (typeof data !== "object") return;
+        
         for (var i = 0; i < data.length; i++) {
             var name = data[i].name,
                 count = data[i].count;
             $("ul#current-games").append("<li><a href='#!'>" + name + "</a> - " + count + " songs</li>");
         }
     });
+}
+
+function updatePlaylistView(uri) {
+    var playlist = models.Playlist.fromURI(uri),
+        username = "",
+        count = playlist.length;
+    
+    // Create a player and fill it with the playlist
+    var player = new views.Player();
+    player.track = playlist.get(0);
+    player.context = playlist;
+    
+    $(".right .sp-player").remove();
+    $(".right .sp-list").remove();
+    
+    // Create a view for the list and pass it to the player
+    var listView = new views.List(playlist);
+    $("#current-game-header").after(listView.node);
+    $("#current-game-header").after(player.node);
+    
+    $("#current-game-list").text(playlist.data.name);
+    $("#current-game-owner").text("Created by " + username);
+    $("#current-game-count").text(String(count) + "tracks");
+    
+    // Light styling for playlists
+    $(".sp-list").addClass("sp-light");
 }
 
 $(document).ready(function() {
@@ -74,21 +111,12 @@ $(document).ready(function() {
         $new_game_form.slideToggle("fast");
     });
     
+    
     $("button#create-game").on("click", function(event) {
         var name = $("input#playlist-name").val(),
             author = $("input#author-id").val();
         
         if (name !== "") {
-            /*
-            playlist = models.Playlist.fromURI(uri);
-            console.log(playlist);
-            
-            var player = new views.Player();
-            player.context = newPlaylist;
-            $('#player').append(player.node);
-            var playlist = new views.List(newPlaylist);
-            $('#player').append(playlist.node);
-            */
             
             var discofy_url = "",
                 selected = $("ul.chzn-results").find(".result-selected"),
@@ -105,8 +133,23 @@ $(document).ready(function() {
                 author : author,
                 players : players
             }, function(data) {
-                console.log("Request callback");
+                console.log("POST response:");
+                console.log(data);
+                
+                updatePlaylistView(data.uri);
             });
         }
     });
+    
+    $("ul#current-games").on("click", "li", function(event) {
+        $(this).parent().children("li").removeClass("active");
+        $(this).addClass("active");
+        
+        var uri = this.id;
+        updatePlaylistView(uri);
+    });
+    
+    var firstPlaylist = $("ul#current-games").children("li")[0];
+    updatePlaylistView(firstPlaylist.id);
+    
 });

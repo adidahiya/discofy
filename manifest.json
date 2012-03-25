@@ -9,23 +9,10 @@
         "en": "Discofy"
     },
     "BundleType": "Application",
-    "DefaultTabs": [
-        {
-            "arguments": "home_tab",
-            "title": {
-                "en": "Home"
-            }
-        },
-        {
-            "arguments": "games",
-            "title": {
-                "en": "Games"
-            }
-        }
-    ],
     "RequiredInterface": 1,
     "RequiredPermissions": [
-        "https://graph.facebook.com"
+        "https://graph.facebook.com",
+        "http://fonts.googleapis.com"
     ],
     "SupportedLanguages": [
         "en"

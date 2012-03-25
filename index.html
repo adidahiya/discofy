@@ -4,8 +4,6 @@
   <title>Discofy</title>
     
   <meta charset="utf-8">
-  <link rel="stylesheet" href="sp://import/css/eve.css">
-  <link rel="stylesheet" href="sp://import/css/shared.css">
   <link rel="stylesheet" href="sp://discofy/css/styles.css">
   <link rel="stylesheet" href="sp://discofy/css/chosen.css">
     
@@ -21,8 +19,8 @@
       <h3>Current Games</h3>
       
       <ul id="current-games">
-        <li><a href="#!">A playlist</a> - 42 songs</li>
-        <li><a href="#!">More playlists</a> - 38 songs</li>
+        <li class="active" id="spotify:user:adidas006:playlist:2KWtqQQKBuVIyHF2ByoGNQ"><a href="#!">Collaborative test</a> - 2 tracks</li>
+        <li id="spotify:user:adidas006:playlist:3kL7PJmWDQdWDbntZuWp60"><a href="#!">EDM</a> - 18 tracks</li>
       </ul>
       
       <button class="new-button" id="new-game">+ New Game</button>
@@ -33,7 +31,7 @@
         </div>
         <div class="field">
           <select class="chzn-select" multiple data-placeholder="Choose friends to play with" id="players" name="players">
-            
+          
           </select>
         </div>
         <button class="new-button" id="create-game">Create Game</button>
@@ -42,8 +40,16 @@
     </div>
     
     <div class="right">
-      <h3>Listening History</h3>
-      <ul id="listens"></ul>
+      <div id="current-game-header">
+        <h2 id="current-game-list"></h2>
+        <h4 id="current-game-owner"></h4> - <p id="current-game-count"></p>
+      </div>
+      
+      <h3>Search for a song</h3>
+      <div id="tracks">
+        <h3>Listening History</h3>
+        <ul id="listens"></ul>
+      </div>
     </div>
     
   </div>

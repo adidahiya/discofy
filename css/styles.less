@@ -1,13 +1,32 @@
 @import "mixins.less";
 @import "forms.css";
+@import url("sp://import/css/eve.css");
+@import url("sp://import/css/player.css");
+@import url("sp://import/css/list.css");
+@import url("sp://import/css/tracks.css");
+@import url("sp://import/css/shared.css");
+
+body {
+  background: url('../images/cubes.png') repeat;
+  min-height: 100%;
+}
 
 a {
   .transition(color 0.1s linear);
 }
 
+.well {
+  padding: 10px;
+  .border-radius(3px);
+  .box-shadow(inset 0px 0px 6px rgba(0,0,0,0.3));
+  background: rgba(200,200,200,0.6);
+  border-bottom: solid 1px rgba(255,255,255,0.8);
+}
+
 .container {
   margin: 0 auto;
   padding: 10px 30px;
+  width: 820px;
 }
 
 #title {
@@ -19,20 +38,17 @@ a {
 }
 
 .left {
-  width: 45%;
+  width: 340px;
   float: left;
   
   button#new-game {
-    margin: 20px 40%;
+    margin: 20px 110px;
   }
   
   #new-game-form {
     visibility: hidden;
-    padding: 10px;
-    .border-radius(3px);
-    .box-shadow(inset 0px 0px 6px rgba(0,0,0,0.3));
-    background: rgba(50,50,50,0.1);
-    border-bottom: solid 1px rgba(255,255,255,0.8);
+    margin-right: 20px;
+    .well;
     
     input[type='text'] {
       width: 97%;
@@ -41,7 +57,7 @@ a {
     }
     
     select {
-      width: 75%;
+      width: 200px;
     }
     
     button {
@@ -62,11 +78,54 @@ a {
     li {
       padding: 10px;
       border-bottom: solid 1px #CCC;
+      .transition(background-color 0.1s linear);
+      &:hover, &.active { background: rgba(50,50,50,0.1); }
+    }
+    a {
+      color: #333;
+      &:hover { color: #000; }
     }
   }
 }
 
 .right {
-  width: 45%;
+  width: 460px;
   float: right;
+  .well;
+  
+  #current-game-header {
+    float: left;
+    max-width: 360px;
+    
+    #current-game-owner, #current-game-count { 
+      display: inline;
+    }
+  }
+  
+  .sp-player {
+    float: right;
+    width: 80px;
+    height: 80px;
+    margin: 0 0 10px 0;
+  }
+  
+  .sp-list {
+    // width: auto;
+    margin-bottom: 20px;
+  }
+  
+  ul#listens {
+    img { width: 80px; }
+    li { 
+      float: left;
+      text-align: center; 
+      max-width: 80px;
+      padding: 5px;
+      
+      a { 
+        color: #333;
+        &:hover { color: #000; }
+      }
+    }
+  }
 }
