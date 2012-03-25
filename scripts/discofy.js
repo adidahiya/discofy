@@ -87,7 +87,27 @@ function init() {
     });
 }
 
+function toggleLoading(selector) {
+    var $el = $(selector),
+        $spinner = $el.find(".loading"),
+        int;
+    
+    if ($spinner.is(":visible")) {    
+        $spinner.fadeOut();
+        $el.children().fadeIn();
+        int = setInterval(function() {
+            $spinner.css("background-position-x", "-=30");
+        }, 100);
+    } else {
+        $el.children().fadeOut();
+        $spinner.fadeIn();
+        int = window.clearInterval(int);
+    }
+}
+
 function updatePlaylistView(uri) {
+    toggleLoading(".right");
+    
     var playlist = models.Playlist.fromURI(uri),
         username = "",
         count = playlist.length;
@@ -111,6 +131,8 @@ function updatePlaylistView(uri) {
     
     // Light styling for playlists
     $(".sp-list").addClass("sp-light");
+    
+    toggleLoading(".right");
 }
 
 function executeSearch(query) {

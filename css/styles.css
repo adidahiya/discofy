@@ -39,6 +39,12 @@ a {
   -o-transition: color 0.1s linear;
   transition: color 0.1s linear;
 }
+.loading {
+  display: none;
+  background: url('images/loading.png');
+  width: 30px;
+  height: 30px;
+}
 .well {
   padding: 10px;
   -webkit-border-radius: 3px;
@@ -154,7 +160,7 @@ a {
   margin: 0 0 10px 0;
 }
 .right .sp-list {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .right ul#listens img {
   width: 80px;
