@@ -10,7 +10,8 @@ var permissions = [],
     app_id = '192337954211372',
     request_url = 'https://graph.facebook.com/me';
 
-var current_playlist_uri;
+var current_playlist_uri, 
+    search_results_list = new models.Playlist();
 
 exports.init = init;
 
@@ -105,7 +106,7 @@ function updatePlaylistView(uri) {
     
     
     var playlist = models.Playlist.fromURI(uri),
-        username = "",
+        username = uri.split(':')[2],
         count = playlist.length;
     
     // Create a player and fill it with the playlist
@@ -131,23 +132,39 @@ function updatePlaylistView(uri) {
     $(".right").children().fadeIn();
     window.clearInterval(interval);
     $spinner.fadeOut();
+    
+    renderSearchResults();
+    $(".sp-list").addClass("sp-light");
 }
 
 function executeSearch(query) {
-    var search = new models.Search(query, {
-        searchAlbums : false,
-        searchArtists : false,
-        searchPlaylists : false,
-        searchType : models.SEARCHTYPE.SUGGESTION
+    var search = new models.Search(query);
+    search.pageSize = 10;
+    search.searchAlbums = false;
+    search.searchArtists = false;
+    search.searchPlaylists = false;
+    search.searchType = models.SEARCHTYPE.SUGGESTION;
+    
+    search_results_list.tracks.forEach(function(track) {
+       search_results_list.remove(track); 
     });
     
     search.observe(models.EVENT.CHANGE, function() {
+        var count = 0;
     	search.tracks.forEach(function(track) {
-    		console.log(track.name);
+    	    if (count > 9) return;
+    	    search_results_list.add(track);
+    	    count++;
     	});
     });
 
     search.appendNext();
+}
+
+function renderSearchResults() {
+    // Render the search results view
+    var search_results = new views.List(search_results_list);
+    $("ul#search-results").html(search_results.node);
 }
 
 $(document).ready(function() {
@@ -212,6 +229,23 @@ $(document).ready(function() {
     $("ul#listens").on("click", "li", function(event) {
         event.preventDefault();
         var track_uri = this.id,
+            playlist = models.Playlist.fromURI(current_playlist_uri);
+        
+        playlist.add(track_uri);
+    });
+    
+    renderSearchResults();
+    
+    $("input#search-input").on("keydown", function(event) {
+        executeSearch($(this).val());
+        // Light styling for playlists
+        $(".sp-list").addClass("sp-light");
+    });
+    
+    
+    $("ul#search-results").on("click", "a.sp-track", function(event) {
+        event.preventDefault();
+        var track_uri = this.href,
             playlist = models.Playlist.fromURI(current_playlist_uri);
         
         playlist.add(track_uri);

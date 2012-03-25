@@ -6,10 +6,9 @@
 @import url("sp://import/css/tracks.css");
 @import url("sp://import/css/shared.css");
 
-body {
-  background: url('../images/cubes.png') repeat;
-  min-height: 100%;
-}
+html, body { background: url('../images/cubes.png') repeat; }
+
+body { min-height: 100%; }
 
 a {
   .transition(color 0.1s linear);
@@ -131,22 +130,26 @@ a {
     margin-bottom: 30px;
   }
   
-  ul#listens {
-    img { 
-      width: 80px; 
-      .opacity-transition;
-      &:hover { .opacity(80); }
-    }
-    li { 
-      float: left;
-      text-align: center; 
-      max-width: 80px;
-      padding: 5px;
-      
-      a { 
-        color: #333;
-        &:hover { color: #000; }
-      }
+}
+
+ul#listens {
+  img { 
+    width: 80px; 
+    .opacity-transition;
+    &:hover { .opacity(80); }
+  }
+  li { 
+    float: left;
+    text-align: center; 
+    max-width: 80px;
+    padding: 5px;
+    height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    a { 
+      color: #333;
+      &:hover { color: #000; }
     }
   }
 }
