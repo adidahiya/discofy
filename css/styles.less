@@ -23,12 +23,11 @@ a {
   float: left;
   
   button#new-game {
-    float: right;
-    margin-top: -35px;
+    margin: 20px 40%;
   }
   
   #new-game-form {
-    margin-top: 10px;
+    visibility: hidden;
     padding: 10px;
     .border-radius(3px);
     .box-shadow(inset 0px 0px 6px rgba(0,0,0,0.3));
@@ -48,13 +47,22 @@ a {
     button {
       float: right;
       margin-top: -33px;
+      height: 29px;
     }
     
-    #players_chzn {
+    .chzn-choices {
       .border-radius(3px);
     }
     
     .chzn-container .chzn-results li { text-shadow: none; }
+  }
+  
+  ul#current-games {
+    margin-top: 20px;
+    li {
+      padding: 10px;
+      border-bottom: solid 1px #CCC;
+    }
   }
 }
 

@@ -41,11 +41,10 @@ a {
   float: left;
 }
 .left button#new-game {
-  float: right;
-  margin-top: -35px;
+  margin: 20px 40%;
 }
 .left #new-game-form {
-  margin-top: 10px;
+  visibility: hidden;
   padding: 10px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -69,14 +68,22 @@ a {
 .left #new-game-form button {
   float: right;
   margin-top: -33px;
+  height: 29px;
 }
-.left #new-game-form #players_chzn {
+.left #new-game-form .chzn-choices {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
 .left #new-game-form .chzn-container .chzn-results li {
   text-shadow: none;
+}
+.left ul#current-games {
+  margin-top: 20px;
+}
+.left ul#current-games li {
+  padding: 10px;
+  border-bottom: solid 1px #CCC;
 }
 .right {
   width: 45%;

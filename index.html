@@ -19,12 +19,16 @@
     
     <div class="left">
       <h3>Current Games</h3>
-      <button class="new-button" id="new-game">+ New Game</button>
       
+      <ul id="current-games">
+        <li><a href="#!">A playlist</a> - 42 songs</li>
+        <li><a href="#!">More playlists</a> - 38 songs</li>
+      </ul>
+      
+      <button class="new-button" id="new-game">+ New Game</button>
       <div id="new-game-form">
         <div class="field">
           <input id="author-id" name="author" type="hidden" />
-          <input id="playlist-uri" name="playlist_uri" type="hidden" />
           <input id="playlist-name" name="playlist_name" type="text" placeholder="Playlist name" autofocus="autofocus" />
         </div>
         <div class="field">
@@ -34,6 +38,7 @@
         </div>
         <button class="new-button" id="create-game">Create Game</button>
       </div>
+      
     </div>
     
     <div class="right">
