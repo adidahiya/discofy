@@ -10,6 +10,7 @@ var permissions = [],
     app_id = '192337954211372',
     request_url = 'https://graph.facebook.com/me';
 
+var current_playlist_uri;
 
 exports.init = init;
 
@@ -56,7 +57,7 @@ function init() {
                             playlist = models.Playlist.fromURI(uri),
                             count = playlist.length;
 
-                        $current_games.append("<li><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
+                        $current_games.append("<li id='" + uri + "'><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
                     }
                 });
             });
@@ -74,7 +75,7 @@ function init() {
                     
                     var track = models.Track.fromURI(tracklink, function(t) {
                         var img = "<img src='" + t.image + "' />";
-                        $listens.append("<li><a href='" + tracklink + "'>" + img + "<br/>" + trackname + "</a></li>");
+                        $listens.append("<li id='" + t.uri + "'><a href='" + tracklink + "'>" + img + "<br/>" + trackname + "</a></li>");
                     });
                 }
             });
@@ -87,26 +88,21 @@ function init() {
     });
 }
 
-function toggleLoading(selector) {
-    var $el = $(selector),
-        $spinner = $el.find(".loading"),
-        int;
-    
-    if ($spinner.is(":visible")) {    
-        $spinner.fadeOut();
-        $el.children().fadeIn();
-        int = setInterval(function() {
-            $spinner.css("background-position-x", "-=30");
-        }, 100);
-    } else {
-        $el.children().fadeOut();
-        $spinner.fadeIn();
-        int = window.clearInterval(int);
-    }
-}
-
 function updatePlaylistView(uri) {
-    toggleLoading(".right");
+    current_playlist_uri = uri;
+    
+    // Toggle loading indicator
+    var $spinner = $(".right").find(".loading");
+    
+    $(".right").children().hide();
+    $spinner.fadeIn();
+    var interval = window.setInterval(function() {
+        var s = $spinner.css("background-position-x"),
+            old = parseInt(s.substring(0, s.length - 2)),
+            position = (old - 30) % 360;
+        $spinner.css("background-position-x", position + "px");
+    }, 20);
+    
     
     var playlist = models.Playlist.fromURI(uri),
         username = "",
@@ -114,7 +110,6 @@ function updatePlaylistView(uri) {
     
     // Create a player and fill it with the playlist
     var player = new views.Player();
-    player.track = playlist.get(0);
     player.context = playlist;
     
     $(".right .sp-player").remove();
@@ -125,14 +120,17 @@ function updatePlaylistView(uri) {
     $("#current-game-header").after(listView.node);
     $("#current-game-header").after(player.node);
     
-    $("#current-game-list").text(playlist.data.name);
+    $("#current-game-list").html("<a href='" + uri + "'>" + playlist.data.name + "</a>");
     $("#current-game-owner").text("Created by " + username);
     $("#current-game-count").text(String(count) + " tracks");
     
     // Light styling for playlists
     $(".sp-list").addClass("sp-light");
     
-    toggleLoading(".right");
+    // Toggle loading indicator
+    $(".right").children().fadeIn();
+    window.clearInterval(interval);
+    $spinner.fadeOut();
 }
 
 function executeSearch(query) {
@@ -160,45 +158,42 @@ $(document).ready(function() {
         $new_game_form.slideToggle("fast");
     });
     
-    
     $("button#create-game").on("click", function(event) {
         var name = $("input#playlist-name").val(),
-            author = $("input#author-id").val();
+            author = $("input#author-id").val(),
+            discofy_url = "http://discofy.herokuapp.com/game/new",
+            selected = $("ul.chzn-results").find(".result-selected"),
+            players = [];
         
-        if (name !== "") {
-            
-            var discofy_url = "http://3i9z.localtunnel.com/game/new",
-                selected = $("ul.chzn-results").find(".result-selected"),
-                players = [];
-            
-            // Get selected friend ids and push into players array for POST request
-            for (var i = 0; i < selected.length; i++) {
-                var index = selected[i].id.substr(15);
-                players.push(friendsList[parseInt(index)]);
-            }
-            
-          players.push ("123423465");
-
-            var params = { 
-              title   : name,
-              owner   : author,
-              users   : players,
-              id      : author
-            };
-          console.log (params);
-          $.ajaxSettings.traditional = true;
-          $.ajax({type: "POST",
-                  url:  discofy_url,
-                  dataType: "json",
-                  async: true,
-                  data: params,
-                  success: function(data){
-                    console.log("POST response:");
-                    console.log(data);
-                    
-                    updatePlaylistView(data.uri);
-                  }});
+        if (name === "") return;
+        
+        // Get selected friend ids and push into players array for POST request
+        for (var i = 0; i < selected.length; i++) {
+            var index = selected[i].id.substr(15);
+            players.push(friendsList[parseInt(index)]);
         }
+        
+        var params = { 
+            title: name,
+            owner: author,
+            'users[]': players,
+            id: author
+        };
+        console.log(params);
+        $.ajaxSettings.traditional = true;
+        $.ajax({
+            type: "POST",
+            url:  discofy_url,
+            dataType: "json",
+            async: true,
+            data: params,
+            success: function(data) {
+                console.log("POST response:");
+                console.log(data);
+                
+                updatePlaylistView(data.uri);
+            }
+        });
     });
     
     // Handler for switching between currently open games
@@ -213,5 +208,13 @@ $(document).ready(function() {
     // Initialize current view with first playlist
     var firstPlaylist = $("ul#current-games").children("li")[0];
     updatePlaylistView(firstPlaylist.id);
+    
+    $("ul#listens").on("click", "li", function(event) {
+        event.preventDefault();
+        var track_uri = this.id,
+            playlist = models.Playlist.fromURI(current_playlist_uri);
+        
+        playlist.add(track_uri);
+    });
     
 });

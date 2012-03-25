@@ -17,9 +17,13 @@ a {
 
 .loading {
   display: none;
-  background: url('images/loading.png');
+  background: url('../images/loading.png');
+  background-position: 0 0;
   width: 30px;
   height: 30px;
+  float: right;
+  // position: absolute;
+  // margin-left: 325px;
 }
 
 .well {
@@ -99,6 +103,7 @@ a {
 .right {
   width: 460px;
   float: right;
+  min-height: 30px;
   .well;
   
   #current-game-header {
@@ -107,6 +112,11 @@ a {
     
     #current-game-owner, #current-game-count { 
       display: inline;
+    }
+    
+    a { 
+      color: #333;
+      &:hover { color: #000; }
     }
   }
   
@@ -122,7 +132,11 @@ a {
   }
   
   ul#listens {
-    img { width: 80px; }
+    img { 
+      width: 80px; 
+      .opacity-transition;
+      &:hover { .opacity(80); }
+    }
     li { 
       float: left;
       text-align: center; 

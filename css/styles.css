@@ -41,9 +41,11 @@ a {
 }
 .loading {
   display: none;
-  background: url('images/loading.png');
+  background: url('../images/loading.png');
+  background-position: 0 0;
   width: 30px;
   height: 30px;
+  float: right;
 }
 .well {
   padding: 10px;
@@ -136,6 +138,7 @@ a {
 .right {
   width: 460px;
   float: right;
+  min-height: 30px;
   padding: 10px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -153,6 +156,12 @@ a {
 .right #current-game-header #current-game-owner, .right #current-game-header #current-game-count {
   display: inline;
 }
+.right #current-game-header a {
+  color: #333;
+}
+.right #current-game-header a:hover {
+  color: #000;
+}
 .right .sp-player {
   float: right;
   width: 80px;
@@ -164,6 +173,19 @@ a {
 }
 .right ul#listens img {
   width: 80px;
+  -webkit-transition-property: -khtml-opacity, opacity;
+  -webkit-transition-duration: 0.15s, 0.15s;
+  -webkit-transition-timing-function: linear, linear;
+  -moz-transition-property: -moz-opacity, opacity;
+  -moz-transition-duration: 0.15s, 0.15s;
+  -moz-transition-timing-function: linear, linear;
+  transition-property: -moz-opacity, -khtml-opacity, opacity, filter;
+  transition-duration: 0.15s, 0.15s, 0.15s, 0.15s;
+  transition-timing-function: linear, linear, linear, linear;
+}
+.right ul#listens img:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 .right ul#listens li {
   float: left;
