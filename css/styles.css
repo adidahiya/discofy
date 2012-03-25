@@ -65,6 +65,7 @@ a {
 .left {
   width: 340px;
   float: left;
+  padding-top: 10px;
 }
 .left button#new-game {
   margin: 20px 110px;

@@ -18,6 +18,7 @@ function init() {
     
     auth.authenticateWithFacebook(app_id, permissions, {
         onSuccess : function(accessToken, ttl) {
+            // Get logged in user's friend IDs
             var friends_url = request_url + '/friends?access_token=' + accessToken;
             $.getJSON(friends_url, function(data) {
                 var friends = data.data,
@@ -33,11 +34,34 @@ function init() {
                 $new_game_form.css("visibility", "visible");
             });
             
+            // Get logged in user's ID
             var me_url = request_url + '?access_token=' + accessToken;
             $.getJSON(me_url, function(data) {
                 $("input#author-id").val(data.id);
+                
+                // Now check the db for any current games with an ajax request
+                var owner_id = $("input#author-id").val(),
+                    discofy_url = "http://discofy.herokuapp.com/user/games?id=" + owner_id;
+                    
+                $.get(discofy_url, function(data) {   
+                    if (typeof data !== "object") return;
+
+                    var games = data.games,
+                        $current_games = $("ul#current-games");
+                    
+                    // Populate the list of current games
+                    for (var i = 0; i < games.length; i++) {
+                        var name = games[i].title,
+                            uri = games[i].uri,
+                            playlist = models.Playlist.fromURI(uri),
+                            count = playlist.length;
+
+                        $current_games.append("<li><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
+                    }
+                });
             });
             
+            // Get user's recent listens
             var listening_url = request_url + '/music.listens?access_token=' + accessToken;
             $.getJSON(listening_url, function(data) {
                 var listens = data.data,
@@ -54,28 +78,12 @@ function init() {
                     });
                 }
             });
+            
         },
         onFailure : function(error) {
             console.log("Authentication failed with error: " + error);
         },
         onComplete : function() { }
-    });
-    
-    var owner_id = $("input#author-id").val(),
-        discofy_url = "http://discofy.herokuapp.com/user/games?id=" + owner_id;
-    $.get(discofy_url, function(data) {   
-        if (typeof data !== "object") return;
-        
-        var games = data.games;
-        
-        for (var i = 0; i < games.length; i++) {
-            var name = games[i].title,
-                uri = games[i].uri,
-                playlist = models.Playlist.fromURI(uri),
-                count = playlist.length;
-            
-            $("ul#current-games").append("<li><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
-        }
     });
 }
 
@@ -147,12 +155,15 @@ $(document).ready(function() {
                 players.push(friendsList[parseInt(index)]);
             }
             
-            $.post(discofy_url, { 
+            var params = { 
                 title   : name,
                 owner   : author,
                 users   : players,
                 id      : author
-            }, function(data) {
+            };
+            console.log(params);
+            
+            $.post(discofy_url, params, function(data) {
                 console.log("POST response:");
                 console.log(data);
                 
@@ -161,6 +172,7 @@ $(document).ready(function() {
         }
     });
     
+    // Handler for switching between currently open games
     $("ul#current-games").on("click", "li", function(event) {
         $(this).parent().children("li").removeClass("active");
         $(this).addClass("active");
@@ -169,6 +181,7 @@ $(document).ready(function() {
         updatePlaylistView(uri);
     });
     
+    // Initialize current view with first playlist
     var firstPlaylist = $("ul#current-games").children("li")[0];
     updatePlaylistView(firstPlaylist.id);
     
