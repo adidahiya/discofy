@@ -182,11 +182,11 @@ function check (track1, track2){
   for (var i = 0; i < track2.artists.length; i++){
     t2full = t2full.concat (track2.artists [i].name.split (" "));
   }
-
-  console.log (t1full);
+  
+  // console.log (t1full);
 
   t2full = t2full.join (" ");
-  console.log (t2full);
+  // console.log (t2full);
 
   for (var i = 0; i < t1full.length; i++){
     if (t1full [i].length > 2 &&  t2full.search (t1full [i]) != -1){
@@ -195,6 +195,22 @@ function check (track1, track2){
   }
 
   return false;
+}
+
+function addToCurrentGame(track_uri) {
+    var playlist = models.Playlist.fromURI(current_playlist_uri),
+        oldTrack = playlist.tracks[playlist.length-1];
+    
+    var t = models.Track.fromURI(track_uri, function(newTrack) {
+        if (check(newTrack, oldTrack)) {
+            playlist.add(track_uri);
+            $("h1#title").addClass("success");
+            setTimeout(function() { $("h1#title").removeClass("success"); }, 500);
+        } else {
+            $("h1#title").addClass("active");
+            setTimeout(function() { $("h1#title").removeClass("active"); }, 2000);
+        }
+    });
 }
 
 $(document).ready(function() {
@@ -258,9 +274,8 @@ $(document).ready(function() {
     
     $("ul#listens").on("click", "li", function(event) {
         event.preventDefault();
-        var track_uri = this.id,
-            playlist = models.Playlist.fromURI(current_playlist_uri);
-        playlist.add(track_uri);
+        var track_uri = this.id;
+        addToCurrentGame(track_uri);
     });
     
     renderSearchResults();
@@ -274,10 +289,8 @@ $(document).ready(function() {
     
     $("ul#search-results").on("click", "a.sp-track", function(event) {
         event.preventDefault();
-        var track_uri = this.href,
-            playlist = models.Playlist.fromURI(current_playlist_uri);
-        
-        playlist.add(track_uri);
+        var track_uri = this.href;
+        addToCurrentGame(track_uri);
     });
     
 });
