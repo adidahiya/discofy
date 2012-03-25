@@ -57,13 +57,13 @@ function init() {
                             uri = games[i].uri,
                             playlist = models.Playlist.fromURI(uri),
                             count = playlist.length;
-
+                        
                       playlist.observe (models.EVENT.LOAD, function () {
-                      console.log ("playlist loaded");
-                        console.log (this);
+                          console.log ("playlist loaded");
+                          console.log (this);
                       });
 
-                        $current_games.append("<li id='" + uri + "'><a href='#!'>" + name + "</a> - " + count + " tracks</li>");
+                        $current_games.append("<li id='" + uri + "'><a href='#!'>" + name + "</a></li>");
                     }
                 });
             });
@@ -174,11 +174,11 @@ function renderSearchResults() {
 }
 
 function check (track1, track2){
-  var t1full = track1.name.split(" ");
+  var t1full = track1.name.replace(")", "").replace("(","").split(" ");
   for (var i = 0; i < track1.artists.length; i++){
     t1full = t1full.concat (track1.artists [i].name.split (" "));
   }
-  var t2full = track2.name.split(" ");
+  var t2full = track2.name.replace(")", "").replace("(","").split(" ");
   for (var i = 0; i < track2.artists.length; i++){
     t2full = t2full.concat (track2.artists [i].name.split (" "));
   }
@@ -198,8 +198,15 @@ function check (track1, track2){
 }
 
 function addToCurrentGame(track_uri) {
-    var playlist = models.Playlist.fromURI(current_playlist_uri),
-        oldTrack = playlist.tracks[playlist.length-1];
+    var playlist = models.Playlist.fromURI(current_playlist_uri);
+    if (playlist.length < 1) {
+        playlist.add(track_uri);
+        $("h1#title").addClass("success");
+        setTimeout(function() { $("h1#title").removeClass("success"); }, 500);
+        return;
+    }
+    
+    var oldTrack = playlist.tracks[playlist.length-1];
     
     var t = models.Track.fromURI(track_uri, function(newTrack) {
         if (check(newTrack, oldTrack)) {
