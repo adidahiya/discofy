@@ -2,26 +2,24 @@
 <html lang="en">
 <head>
   <title>Discofy</title>
-    
+
   <meta charset="utf-8">
-  <link rel="stylesheet" href="sp://discofy/css/styles.css">
   <link rel="stylesheet" href="sp://discofy/css/chosen.css">
-    
-  <script type="text/javascript" src="sp://discofy/scripts/jquery.min.js"></script>
-  <script type="text/javascript" src="sp://discofy/scripts/chosen.jquery.js"></script>
+  <link rel="stylesheet" href="sp://discofy/css/styles.css">
+  <script type="text/javascript" src="sp://discofy/scripts/discofy.js"></script>
 </head>
 
-<body onload="sp = getSpotifyApi(1); discofy = sp.require('scripts/discofy'); discofy.init();">
+<body>
   <div class="container">
     <h1 id="title" class="shake">Discofy</h1>
-    
+
     <div class="left">
       <h3>Current Games</h3>
-      
+
       <ul id="current-games">
         <li class="active" id="spotify:user:adidas006:playlist:2KWtqQQKBuVIyHF2ByoGNQ"><a href="#!">Collaborative test</a></li>
       </ul>
-      
+
       <button class="new-button" id="new-game">+ New Game</button>
       <div id="new-game-form">
         <div class="field">
@@ -30,31 +28,31 @@
         </div>
         <div class="field">
           <select class="chzn-select" multiple data-placeholder="Choose friends to play with" id="players" name="players">
-          
+
           </select>
         </div>
         <button class="new-button" id="create-game">Create Game</button>
       </div>
-      
+
     </div>
-    
+
     <div class="right">
       <div id="current-game-header">
         <h2 id="current-game-list"></h2>
         <p id="current-game-owner"></p> - <p id="current-game-count"></p>
       </div>
       <div class="loading"></div>
-      
+
       <h3>Search for a song</h3>
       <input type="text" id="search-input" placeholder="Spotify search..." />
       <ul id="search-results"></ul>
-      
+
       <div id="tracks">
         <h3>Listening History</h3>
         <ul id="listens"></ul>
       </div>
     </div>
-    
+
   </div>
 </body>
 
